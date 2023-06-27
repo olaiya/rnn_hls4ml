@@ -40,6 +40,11 @@ def plot_series(series, y=None, y_pred=None, x_label="$t$", y_label="$x(t)$"):
     plt.hlines(0, 0, 100, linewidth=1)
     plt.axis([0, n_steps + 1, -1, 1])
 
+#Run settings
+train = True
+testHls4ml_q = True
+synth =  True# Only if you want to synthesize the models yourself (>1h per model) rather than look at the provided reports.
+outputSynthData = True
 
 #Generate data
 np.random.seed(42)
@@ -50,14 +55,22 @@ X_valid, y_valid = series[7000:9000, :n_steps], series[7000:9000, -1]
 X_test, y_test = series[9000:, :n_steps], series[9000:, -1]
 
 model = tf.keras.models.Sequential([
-    tf.keras.layers.GRU(20, return_sequences=True, input_shape=[None, 1]),
+    tf.keras.layers.GRU(20, return_sequences=True, input_shape=[n_steps, 1]),
     tf.keras.layers.GRU(20),
     tf.keras.layers.Dense(1, name="output_dense")
 ])
 
 model.compile(loss="mse", optimizer="adam")
-history = model.fit(X_train, y_train, epochs=20,
-                    validation_data=(X_valid, y_valid))
+
+
+modelFileName = 'rnnModel'
+if train:
+    history = model.fit(X_train, y_train, epochs=20,
+                        validation_data=(X_valid, y_valid))
+
+    model.save(modelFileName)
+else:
+    model.load(modelFileName)
 
 #Predict time series
 y_pred = model.predict(X_valid)
@@ -121,9 +134,6 @@ if testHls4ml_q:
     pred_hls4ml_diff = np.abs(y_predict_reg - y_predict_reg_hls4ml)
     print('Predicted difference')
     print(pred_hls4ml_diff[0:20])
-
-    np.savez('./accuracy_evaluation/hls4ml_error_'+label+'_trained_'+decay+'_'+tag+'_nFeature'+str(nFeatures)+'_nEpochs'+str(numEpochs)+'_nBatchSize'+str(batchSize)+'.npz',
-        pred_diff=pred_hls4ml_diff)
 
 if synth:
     print('STARTING VIVADO SYTHNESIS')

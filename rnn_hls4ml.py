@@ -70,7 +70,7 @@ if train:
 
     model.save(modelFileName)
 else:
-    model.load(modelFileName)
+    model = tf.keras.models.load_model(modelFileName)
 
 #Predict time series
 y_pred = model.predict(X_valid)

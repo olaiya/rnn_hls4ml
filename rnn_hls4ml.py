@@ -41,7 +41,7 @@ def plot_series(series, y=None, y_pred=None, x_label="$t$", y_label="$x(t)$"):
     plt.axis([0, n_steps + 1, -1, 1])
 
 #Run settings
-train = False
+train = True
 testHls4ml_q = True
 synth =  True# Only if you want to synthesize the models yourself (>1h per model) rather than look at the provided reports.
 outputSynthData = True

@@ -41,7 +41,7 @@ def plot_series(series, y=None, y_pred=None, x_label="$t$", y_label="$x(t)$"):
     plt.axis([0, n_steps + 1, -1, 1])
 
 #Run settings
-train = True
+train = False
 testHls4ml_q = True
 synth =  True# Only if you want to synthesize the models yourself (>1h per model) rather than look at the provided reports.
 outputSynthData = True
@@ -103,7 +103,7 @@ for layer in hls_config_reg['LayerName'].keys():
     #Set parallelisation
     hls_config_reg['LayerName'][layer]['ParallelizationFactor'] = parallelFactor
 
-hls_config_reg['Model']['Precision'] = 'ap_fixed<48,24>'
+#hls_config_reg['Model']['Precision'] = 'ap_fixed<48,24>'
 hls_config_reg['Model']['ReuseFactor'] = reuseFactor
 
 #If you want best numerical performance for high-accuray models, while the default latency strategy is faster but numerically more unstable
@@ -125,8 +125,8 @@ if testHls4ml_q:
     print('Compiling hls4ml model')
     hls_model_reg.compile()
 
-    y_predict_reg        = qmodel.predict(x_test)
-    y_predict_reg_hls4ml = hls_model_reg.predict(np.ascontiguousarray(x_test))
+    y_predict_reg        = model.predict(X_test)
+    y_predict_reg_hls4ml = hls_model_reg.predict(np.ascontiguousarray(X_test))
 
     print(y_predict_reg[0:20])
     print(y_predict_reg_hls4ml[0:20])

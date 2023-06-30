@@ -93,7 +93,7 @@ hls4ml.model.optimizer.get_optimizer('output_rounding_saturation_mode').configur
 hls4ml.model.optimizer.get_optimizer('output_rounding_saturation_mode').configure(rounding_mode='AP_RND')
 hls4ml.model.optimizer.get_optimizer('output_rounding_saturation_mode').configure(saturation_mode='AP_SAT')
 
-hls_config_reg = hls4ml.utils.config_from_keras_model(model, granularity='name')
+hls_config_reg = hls4ml.utils.config_from_keras_model(model, granularity='name', default_precision='ap_fixed<24,8>')
 
 parallelFactor = 12
 reuseFactor = 1

@@ -120,6 +120,12 @@ cfg_reg['OutputDir']  = firmWareOutPutDir
 cfg_reg['XilinxPart'] = board_model
 
 hls_model_reg = hls4ml.converters.keras_to_hls(cfg_reg)
+hls4ml.utils.plot_model(hls_model_reg, show_shapes=True, show_precision=True)
+
+plots = hls4ml.model.profiling.numerical(model=model, hls_model=hls_model_reg, X=X_test)
+for i, plot in enumerate(plots):
+    plot.savefig('plot_'+str(i)+'.png')
+
 
 if testHls4ml_q:
     print('Compiling hls4ml model')

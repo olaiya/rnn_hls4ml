@@ -103,7 +103,6 @@ for layer in hls_config_reg['LayerName'].keys():
     #Set parallelisation
     hls_config_reg['LayerName'][layer]['ParallelizationFactor'] = parallelFactor
 
-#hls_config_reg['Model']['Precision'] = 'ap_fixed<48,24>'
 hls_config_reg['Model']['ReuseFactor'] = reuseFactor
 
 #If you want best numerical performance for high-accuray models, while the default latency strategy is faster but numerically more unstable
@@ -113,7 +112,7 @@ print('Plotting Dict Params')
 plotting.print_dict(hls_config_reg)
 
 cfg_reg = hls4ml.converters.create_config(backend='Vivado')
-cfg_reg['IOType']     = 'io_stream' # Must set this if using CNNs!
+cfg_reg['IOType']     = 'io_parallel' 
 cfg_reg['HLSConfig']  = hls_config_reg
 cfg_reg['KerasModel'] = model
 cfg_reg['OutputDir']  = firmWareOutPutDir
